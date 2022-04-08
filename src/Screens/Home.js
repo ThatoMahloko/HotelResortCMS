@@ -27,6 +27,14 @@ function Home() {
         }
     }
 
+    function toggleTableOff() {
+        if (toggleTableOnOff == false) {
+            setToggleTableOnOff(true)
+        } else {
+            setToggleTableOnOff(false)
+        }
+    }
+
     function createData(name, calories, fat, carbs, protein) {
         return { name, calories, fat, carbs, protein };
     }
@@ -61,7 +69,7 @@ function Home() {
     }
 
     return (
-        <Container>
+        <Container sx={{ paddingBottom: 1 }}>
             <AppBar position="sticky" className={classes.root}>
                 <Toolbar variant="regular" >
                     {
@@ -105,7 +113,7 @@ function Home() {
 
             <Container maxWidth="xs">
                 <Box>
-                    <Typography variant='h2' align='center'>Hotels</Typography>
+                    <Typography variant='h2' align='center' color="#FE6B8B">Hotels</Typography>
                     <div style={{ display: 'flex' }}>
                         <TextField style={{ marginRight: 10 }} id="outlined-basic" label="Filter Resort" variant="outlined" fullWidth onChange={(filterValue) => setFilterValue(filterValue.target.value)} />
                         <Button variant='contained' className={classes.clear} onClick={function dids() {
@@ -178,7 +186,7 @@ function Home() {
             </Typography>
 
 
-            <TableContainer component={Paper}>
+            <TableContainer component={Paper} className={classes.maintable}>
                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
                     <TableHead>
                         <TableRow>
@@ -206,7 +214,7 @@ function Home() {
                 </Table>
             </TableContainer>
             <Grid container direction="column" alignItems="center">
-                <Button variant='contained' className={classes.toggleOut}>
+                <Button variant='contained' className={classes.toggleOut} onClick={toggleTableOff}>
                     Toggle Out
                 </Button>
             </Grid>
