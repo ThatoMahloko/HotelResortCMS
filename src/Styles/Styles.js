@@ -43,12 +43,15 @@ const Styles = makeStyles({
         flexDirection: 'row',
         justifyContent: 'center'
     },
-    textButton:{
-        alignSelf:'center'
+    textButton: {
+        alignSelf: 'center'
     },
     buttonLogin: {
         width: '90%',
-        marginTop:8
+        marginTop: 8
+    },
+    tabCell: {
+        background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
     }
 
 })
