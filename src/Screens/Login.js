@@ -1,11 +1,26 @@
 import React from 'react'
 import { Box, TextField, styled, Button, Container, CssBaseline } from '@mui/material'
 import { Link, useNavigate } from 'react-router-dom'
+import { db, firebase } from '../config/firebase'
 import Styles from '../Styles/Styles'
 
 function Login() {
     const classes = Styles()
     const navigate = useNavigate()
+    const [email, setEmail] = React.useState()
+    const [password, setpassword] = React.useState()
+
+    function Login() {
+        firebase.auth().signInWithEmailAndPassword(email, password)
+            .then((userCredential) => {
+                var user = userCredential.user
+            })
+            .catch((error) => {
+                var errorCode = error.code;
+                var errorMessage = error.message;
+            })
+    }
+
     return (
         <React.Fragment>
             <CssBaseline />

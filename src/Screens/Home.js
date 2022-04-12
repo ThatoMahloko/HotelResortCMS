@@ -4,22 +4,15 @@ import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import Styles from '../Styles/Styles'
 import { db } from '../config/firebase'
-import { Check } from '@mui/icons-material';
+import { Check, ExitToApp } from '@mui/icons-material';
+import {useNavigate} from 'react-router-dom'
 
 function Home() {
     const drawerWidth = 240;
     const [hotelData, setHotelData] = React.useState("")
     const [isChecked, setischecked] = React.useState.apply(false)
     const classes = Styles()
-    const StyledTableCell = styled(TableCell)(({ theme }) => ({
-        [`&.${tableCellClasses.head}`]: {
-            backgroundColor: 'grey',
-            color: theme.palette.common.white,
-        },
-        [`&.${tableCellClasses.body}`]: {
-            fontSize: 14,
-        },
-    }))
+    const navigate = useNavigate();
 
     React.useEffect(() => {
         db.collection("Hotels").onSnapshot((snapshot) => {
@@ -33,9 +26,22 @@ function Home() {
     })
     return (
         <Container sx={{ paddingBottom: 1 }}>
-            <Box sx={{ display: 'flex', padding: 0 }}>
+            <Box sx={{ display: 'flex', p: 3 }}>
                 <CssBaseline />
-
+                <AppBar
+                    position="fixed"
+                    sx={{
+                        width: `calc(100% - ${drawerWidth}px)`, ml: `${drawerWidth}px`,
+                        background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
+                    }}
+                >
+                    <Toolbar>
+                        <Typography variant="h6" noWrap component="div">
+                            Permanent drawer
+                        </Typography>
+                    </Toolbar>
+                </AppBar>
+                <Toolbar />
                 <Drawer
                     sx={{
                         width: drawerWidth,
@@ -62,14 +68,15 @@ function Home() {
                     </List>
                     <Divider />
                     <List>
-                        {['All mail', 'Trash', 'Spam'].map((text, index) => (
-                            <ListItem button key={text}>
-                                <ListItemIcon>
-                                    {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                                </ListItemIcon>
-                                <ListItemText primary={text} />
-                            </ListItem>
-                        ))}
+
+                        <ListItem button onClick={function name(){
+                            navigate('/')
+                        }}>
+                            <ListItemIcon>
+                                <ExitToApp />
+                            </ListItemIcon>
+                            <ListItemText primary="Logout" />
+                        </ListItem>
                     </List>
                 </Drawer>
                 <Box
@@ -81,14 +88,6 @@ function Home() {
                         <Table >
                             <TableHead className={classes.tabCell}>
                                 <TableCell padding='checkbox' defaultChecked>
-                                    <Checkbox color='primary' checked={isChecked} onClick={function name() {
-                                        if (isChecked == false) {
-                                            setischecked(true)
-                                        } else {
-                                            setischecked(false)
-                                        }
-                                    }} />
-
                                 </TableCell>
                                 <TableCell>
                                     <Typography variant='h7'>
@@ -118,16 +117,11 @@ function Home() {
                             </TableHead>
 
                             <TableRow >
-                                {
-                                    isChecked == true ?
-                                        <TableCell padding='checkbox'>
-                                            <Checkbox color='success' checked={true} />
-                                        </TableCell>
-                                        :
-                                        <TableCell padding='checkbox'>
-                                            <Checkbox color='success' checked={false} />
-                                        </TableCell>
-                                }
+
+                                <TableCell padding='checkbox'>
+                                    <Checkbox color='success' />
+                                </TableCell>
+
 
                                 <TableCell>
                                     <Typography variant='h7'>

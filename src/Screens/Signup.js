@@ -1,10 +1,22 @@
 import React from 'react'
 import { Box, TextField, styled, Button, Container, CssBaseline } from '@mui/material'
 import { Link } from 'react-router-dom'
+import { db } from '../config/firebase'
 import Styles from '../Styles/Styles'
 
 function Signup() {
+    const [email, setEmail] = React.useState()
+    const [branch, setBranch] = React.useState()
+    const [hotel, setHotel] = React.useState()
     const classes = Styles()
+
+    function createUser() {
+        db.collection('Admin').doc(email).set({
+            branch: branch,
+            hotel: hotel
+        })
+    }
+
     return (
         <React.Fragment>
             <CssBaseline />
