@@ -1,21 +1,23 @@
 import React from 'react'
-import { Container, Box, Drawer, CssBaseline, AppBar, Toolbar, List, Typography, Divider, ListItem, ListItemIcon, ListItemText, TableCell, TableRow, TableHead, Checkbox, Table, styled, tableCellClasses, Paper } from '@mui/material'
+import { Container, Box, Drawer, CssBaseline, AppBar, Toolbar, List, Typography, Divider, ListItem, ListItemIcon, ListItemText, TableCell, TableRow, TableHead, Checkbox, Table, styled, tableCellClasses, Paper, Alert, Collapse, Button, IconButton } from '@mui/material'
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import Styles from '../Styles/Styles'
 import { db } from '../config/firebase'
-import { Check, ExitToApp } from '@mui/icons-material';
-import {useNavigate} from 'react-router-dom'
+import { Check, ExitToApp, GraphicEq, TableChart, Close, Construction } from '@mui/icons-material';
+import { useNavigate } from 'react-router-dom'
 
 function Home() {
     const drawerWidth = 240;
-    const [hotelData, setHotelData] = React.useState("")
+    const [hotelData, setHotelData] = React.useState([])
     const [isChecked, setischecked] = React.useState.apply(false)
+    const [open, setOpen] = React.useState(true);
     const classes = Styles()
     const navigate = useNavigate();
 
     React.useEffect(() => {
-        db.collection("Hotels").onSnapshot((snapshot) => {
+        console.log('hello')
+        db.collection("Hotels").doc("ApogeeBoutiqueHotel&Spa").onSnapshot((snapshot) => {
             const dis = snapshot.docs.map((doc) => ({
                 id: doc.id,
                 ...doc.data(),
@@ -37,7 +39,7 @@ function Home() {
                 >
                     <Toolbar>
                         <Typography variant="h6" noWrap component="div">
-                            Permanent drawer
+                            Overall Bookings
                         </Typography>
                     </Toolbar>
                 </AppBar>
@@ -57,19 +59,29 @@ function Home() {
                     <Toolbar />
                     <Divider />
                     <List>
-                        {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-                            <ListItem button key={text}>
-                                <ListItemIcon>
-                                    {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                                </ListItemIcon>
-                                <ListItemText primary={text} />
-                            </ListItem>
-                        ))}
+
+                        <ListItem button onClick={function name() {
+                            navigate('/Home')
+                        }}>
+                            <ListItemIcon>
+                                <TableChart />
+                            </ListItemIcon>
+                            <ListItemText primary="Overall Bookings" />
+                        </ListItem>
+
+                        <ListItem button onClick={function name() {
+                            navigate('/ManageBookings')
+                        }}>
+                            <ListItemIcon>
+                                <Construction />
+                            </ListItemIcon>
+                            <ListItemText primary="Manage Bookings" />
+                        </ListItem>
                     </List>
                     <Divider />
                     <List>
 
-                        <ListItem button onClick={function name(){
+                        <ListItem button onClick={function name() {
                             navigate('/')
                         }}>
                             <ListItemIcon>
@@ -84,11 +96,30 @@ function Home() {
                     sx={{ bgcolor: 'background.default', p: 0 }}
                 >
                     <Toolbar />
+                    <Collapse in={open}>
+                        <Alert
+                            action={
+                                <IconButton
+                                    aria-label="close"
+                                    color="inherit"
+                                    size="small"
+                                    onClick={() => {
+                                        setOpen(false);
+                                    }}
+                                >
+                                    <Close fontSize="inherit" />
+                                </IconButton>
+                            }
+                            sx={{ mb: 2 }}
+                        >
+                            You are authorised to manage this hotel — here are all bookings!
+                        </Alert>
+                    </Collapse>
+
+                    <Toolbar />
                     <Paper sx={{ width: '100%', mb: 2 }}>
-                        <Table >
+                        <Table>
                             <TableHead className={classes.tabCell}>
-                                <TableCell padding='checkbox' defaultChecked>
-                                </TableCell>
                                 <TableCell>
                                     <Typography variant='h7'>
                                         Email
@@ -117,34 +148,38 @@ function Home() {
                             </TableHead>
 
                             <TableRow >
+                                {
 
-                                <TableCell padding='checkbox'>
-                                    <Checkbox color='success' />
-                                </TableCell>
+                                    //    hotelData.map(data => {
+                                    //         return (
+                                    //             <>
+                                    //                 <TableCell>
+                                    //                     <Typography variant='h7'>
+                                    //                         {data.id}
+                                    //                     </Typography>
+                                    //                 </TableCell>
 
+                                    //                 <TableCell>
+                                    //                     <Typography variant='h7'>
+                                    //                         {data.guest}
+                                    //                     </Typography>
+                                    //                 </TableCell>
 
-                                <TableCell>
-                                    <Typography variant='h7'>
-                                        thato732mahloko@gmail.com
-                                    </Typography>
-                                </TableCell>
+                                    //                 <TableCell>
+                                    //                     <Typography variant='h7'>
+                                    //                         {data.check_in}
+                                    //                     </Typography>
+                                    //                 </TableCell>
+                                    //                 <TableCell>
+                                    //                     <Typography variant='h7'>
+                                    //                         {data.check_out}
+                                    //                     </Typography>
+                                    //                 </TableCell>
+                                    //             </>
+                                    //         )
+                                    //     })
 
-                                <TableCell>
-                                    <Typography variant='h7'>
-                                        5
-                                    </Typography>
-                                </TableCell>
-
-                                <TableCell>
-                                    <Typography variant='h7'>
-                                        Sun Apr 03 2022
-                                    </Typography>
-                                </TableCell>
-                                <TableCell>
-                                    <Typography variant='h7'>
-                                        Sat Apr 09 2022
-                                    </Typography>
-                                </TableCell>
+                                }
                                 {
                                     isChecked == false ?
                                         <TableCell sx={{ backgroundColor: 'red' }}>
