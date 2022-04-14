@@ -1,8 +1,9 @@
 import React from 'react'
-import { Container, Box, CssBaseline, AppBar, Toolbar, Typography, Drawer, Divider, List, ListItem, ListItemIcon, ListItemText, Paper, Card, CardContent, CardMedia, CardHeader, Avatar, IconButton, Alert, Dialog } from '@mui/material'
-import { TableChart, Construction, ExitToApp, ExpandMore, MoreVert } from '@mui/icons-material'
+import { Container, Box, CssBaseline, AppBar, Toolbar, Typography, Drawer, Divider, List, ListItem, ListItemIcon, ListItemText, Paper, Card, CardContent, CardMedia, CardHeader, Avatar, IconButton, Alert, Dialog, Collapse, Autocomplete, TextField, Button } from '@mui/material'
+import { TableChart, Construction, ExitToApp, ExpandMore, MoreVert, PartyModeSharp } from '@mui/icons-material'
 import { useNavigate } from 'react-router-dom'
 import Styles from '../Styles/Styles'
+import { db } from '../config/firebase'
 
 function ManageBookins() {
   const navigate = useNavigate()
@@ -10,27 +11,42 @@ function ManageBookins() {
   const classes = Styles()
   const [status, setStatus] = React.useState("success")
   const [alertmMessage, setAlertMessage] = React.useState()
+  const [open, setOpen] = React.useState(false)
 
   var statusObj = [
     {
-      stat: 'warning'
+      stat: 'warning',
+      id: "1"
     },
     {
-      stat: 'error'
+      stat: 'error',
+      id: "2"
     },
     {
-      stat: 'info'
+      stat: 'info',
+      id: "3"
     },
     {
-      stat: 'success'
+      stat: 'success',
+      id: "4"
     },
     {
-      stat: 'error'
+      stat: 'error',
+      id: "5"
     },
     {
-      stat: 'error'
+      stat: 'error',
+      id: "6"
     },
   ]
+
+  function ToggleEditBooking() {
+    if (open == false) {
+      setOpen(true)
+    } else {
+      setOpen(false)
+    }
+  }
 
   return (
     <Container sx={{ paddingBottom: 1 }}>
@@ -115,7 +131,7 @@ function ManageBookins() {
                           </Avatar>
                         }
                         action={
-                          <IconButton aria-label="settings">
+                          <IconButton aria-label="settings" onClick={ToggleEditBooking}>
                             <MoreVert />
                           </IconButton>
                         }
@@ -127,24 +143,70 @@ function ManageBookins() {
                         {
                           data.stat == "error" ?
 
-                            "hello"
+                            `Booking Is cancelled. ${data.id}`
                             :
                             data.stat == "info" ?
-                              "info"
+                              `Booking is confirmed ${data.id}`
                               :
                               data.stat == "warning" ?
 
-                                "warn"
+                                `Booking is pending for confirmation. ${data.id}`
                                 :
                                 data.stat == "success" ?
-                                  "successssss"
+                                  `Guest currently visiting. ${data.id}`
                                   :
                                   ""
-
-
                         }
 
                       </Alert>
+                      <Collapse in={open}>
+
+                        <Button variant="contained" color="error" sx={{ margin: 2 }} onClick={
+                          db.collection("Hotels").doc(data.id).collection("Bookings").doc("thato732mahloko@gmail.com").update({
+                            alert_status: "error"
+                          })
+                            .then(() => {
+                              console.log("Document successfully updated!!")
+                            })
+                            .catch((error) => {
+                              console.log("Error Updataing the document", error.code)
+                            })
+                        }>Cancel</Button>
+                        <Button variant="contained" color="info" sx={{ margin: 2 }} onClick={
+                          db.collection("Hotels").doc(data.id).collection("Bookings").doc("thato732mahloko@gmail.com").update({
+                            alert_status: "info"
+                          })
+                            .then(() => {
+                              console.log("Document successfully updated!!")
+                            })
+                            .catch((error) => {
+                              console.log("Error Updataing the document", error.code)
+                            })
+                        }>Confirm</Button>
+                        <Button variant="contained" color="warning" sx={{ margin: 2 }} onClick={
+                          db.collection("Hotels").doc(data.id).collection("Bookings").doc("thato732mahloko@gmail.com").update({
+                            alert_status: "warning"
+                          })
+                            .then(() => {
+                              console.log("Document successfully updated!!")
+                            })
+                            .catch((error) => {
+                              console.log("Error Updataing the document", error.code)
+                            })
+                        }>Pending</Button>
+                        <Button variant="contained" color="success" sx={{ margin: 2 }} onClick={
+                          db.collection("Hotels").doc(data.id).collection("Bookings").doc("thato732mahloko@gmail.com").update({
+                            alert_status: "success"
+                          })
+                            .then(() => {
+                              console.log("Document successfully updated!!")
+                            })
+                            .catch((error) => {
+                              console.log("Error Updataing the document", error.code)
+                            })
+                        }>Visiting</Button>
+
+                      </Collapse>
                     </CardContent>
                   </Card>
                 </>
