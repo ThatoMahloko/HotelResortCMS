@@ -16,13 +16,13 @@ function Home() {
     const navigate = useNavigate();
 
     React.useEffect(() => {
-        console.log('hello')
         db.collection("Hotels").doc("ApogeeBoutiqueHotel&Spa").onSnapshot((snapshot) => {
             const dis = snapshot.docs.map((doc) => ({
                 id: doc.id,
                 ...doc.data(),
             }));
             setHotelData(dis);
+            console.log('hello')
             console.log(hotelData)
         });
     })
@@ -150,34 +150,34 @@ function Home() {
                             <TableRow >
                                 {
 
-                                    //    hotelData.map(data => {
-                                    //         return (
-                                    //             <>
-                                    //                 <TableCell>
-                                    //                     <Typography variant='h7'>
-                                    //                         {data.id}
-                                    //                     </Typography>
-                                    //                 </TableCell>
+                                    hotelData.map(data => {
+                                        return (
+                                            <>
+                                                <TableCell>
+                                                    <Typography variant='h7'>
+                                                        {data.id}
+                                                    </Typography>
+                                                </TableCell>
 
-                                    //                 <TableCell>
-                                    //                     <Typography variant='h7'>
-                                    //                         {data.guest}
-                                    //                     </Typography>
-                                    //                 </TableCell>
+                                                <TableCell>
+                                                    <Typography variant='h7'>
+                                                        {data.guest}
+                                                    </Typography>
+                                                </TableCell>
 
-                                    //                 <TableCell>
-                                    //                     <Typography variant='h7'>
-                                    //                         {data.check_in}
-                                    //                     </Typography>
-                                    //                 </TableCell>
-                                    //                 <TableCell>
-                                    //                     <Typography variant='h7'>
-                                    //                         {data.check_out}
-                                    //                     </Typography>
-                                    //                 </TableCell>
-                                    //             </>
-                                    //         )
-                                    //     })
+                                                <TableCell>
+                                                    <Typography variant='h7'>
+                                                        {data.check_in}
+                                                    </Typography>
+                                                </TableCell>
+                                                <TableCell>
+                                                    <Typography variant='h7'>
+                                                        {data.check_out}
+                                                    </Typography>
+                                                </TableCell>
+                                            </>
+                                        )
+                                    })
 
                                 }
                                 {
