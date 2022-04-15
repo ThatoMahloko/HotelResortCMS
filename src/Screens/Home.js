@@ -3,9 +3,10 @@ import { Container, Box, Drawer, CssBaseline, AppBar, Toolbar, List, Typography,
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import Styles from '../Styles/Styles'
-import { db } from '../config/firebase'
+import { db, auth } from '../config/firebase'
 import { Check, ExitToApp, GraphicEq, TableChart, Close, Construction } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom'
+import moment from 'moment';
 
 function Home() {
     const drawerWidth = 240;
@@ -16,16 +17,24 @@ function Home() {
     const navigate = useNavigate();
 
     React.useEffect(() => {
-        db.collection("Hotels").doc("ApogeeBoutiqueHotel&Spa").onSnapshot((snapshot) => {
+        db.collection("Hotels").doc("ApogeeBoutiqueHotel&Spa").collection("Bookings").onSnapshot((snapshot) => {
             const dis = snapshot.docs.map((doc) => ({
                 id: doc.id,
                 ...doc.data(),
-            }));
-            setHotelData(dis);
-            console.log('hello')
-            console.log(hotelData)
-        });
+            }))
+            setHotelData(dis)
+            console.log("hello")
+        })
     })
+
+    function SignOut() {
+        auth.signOut().then(() => {
+            console.log("Successfully Signed Out")
+            navigate('/')
+        }).catch((error) => {
+            console.log(error.code)
+        })
+    }
     return (
         <Container sx={{ paddingBottom: 1 }}>
             <Box sx={{ display: 'flex', p: 3 }}>
@@ -81,9 +90,7 @@ function Home() {
                     <Divider />
                     <List>
 
-                        <ListItem button onClick={function name() {
-                            navigate('/')
-                        }}>
+                        <ListItem button onClick={SignOut}>
                             <ListItemIcon>
                                 <ExitToApp />
                             </ListItemIcon>
@@ -118,88 +125,88 @@ function Home() {
 
                     <Toolbar />
                     <Paper sx={{ width: '100%', mb: 2 }}>
-                        <Table>
-                            <TableHead className={classes.tabCell}>
-                                <TableCell>
-                                    <Typography variant='h7'>
-                                        Email
-                                    </Typography>
-                                </TableCell>
-                                <TableCell>
-                                    <Typography variant='h7'>
-                                        #Guests
-                                    </Typography>
-                                </TableCell>
-                                <TableCell>
-                                    <Typography variant='h7'>
-                                        Check In
-                                    </Typography>
-                                </TableCell>
-                                <TableCell >
-                                    <Typography variant='h7'>
-                                        Check Out
-                                    </Typography>
-                                </TableCell>
-                                <TableCell >
-                                    <Typography variant='h7'>
-                                        Status
-                                    </Typography>
-                                </TableCell>
-                            </TableHead>
-
-                            <TableRow >
-                                {
-
-                                    hotelData.map(data => {
-                                        return (
-                                            <>
-                                                <TableCell>
-                                                    <Typography variant='h7'>
-                                                        {data.id}
-                                                    </Typography>
-                                                </TableCell>
-
-                                                <TableCell>
-                                                    <Typography variant='h7'>
-                                                        {data.guest}
-                                                    </Typography>
-                                                </TableCell>
-
-                                                <TableCell>
-                                                    <Typography variant='h7'>
-                                                        {data.check_in}
-                                                    </Typography>
-                                                </TableCell>
-                                                <TableCell>
-                                                    <Typography variant='h7'>
-                                                        {data.check_out}
-                                                    </Typography>
-                                                </TableCell>
-                                            </>
-                                        )
-                                    })
-
-                                }
-                                {
-                                    isChecked == false ?
-                                        <TableCell sx={{ backgroundColor: 'red' }}>
+                        {
+                            <Paper sx={{ width: '100%', mb: 2 }}>
+                                <Table>
+                                    <TableHead className={classes.tabCell}>
+                                        <TableCell>
                                             <Typography variant='h7'>
-                                                DECLINED
+                                                Email
                                             </Typography>
                                         </TableCell>
-                                        :
-                                        <TableCell sx={{ backgroundColor: 'green' }}>
+                                        <TableCell>
                                             <Typography variant='h7'>
-                                                ACCEPTED
+                                                #Guests
                                             </Typography>
                                         </TableCell>
-                                }
-                            </TableRow>
-                        </Table>
+                                        <TableCell>
+                                            <Typography variant='h7'>
+                                                Check In
+                                            </Typography>
+                                        </TableCell>
+                                        <TableCell >
+                                            <Typography variant='h7'>
+                                                Check Out
+                                            </Typography>
+                                        </TableCell>
+                                        <TableCell >
+                                            <Typography variant='h7'>
+                                                Status
+                                            </Typography>
+                                        </TableCell>
+                                    </TableHead>
+
+                                    {
+                                        hotelData.map(data => {
+                                            return (
+                                                <TableRow>
+                                                    <TableCell>
+                                                        <Typography>{data.guest_email}</Typography>
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        <Typography>{data.guest}</Typography>
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        <Typography>{moment(data.check_in).format('MMMM DD, YYYY')}</Typography>
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        <Typography>{moment(data.check_out).format('MMMM DD, YYYY')}</Typography>
+                                                    </TableCell>
+                                                    {
+                                                        data.alert_status == "error" ?
+                                                            <TableCell sx={{ backgroundColor: 'red' }}>
+                                                                <Typography>Booking Cancelled</Typography>
+                                                            </TableCell>
+                                                            :
+                                                            data.alert_status == "info" ?
+                                                                <TableCell color='info' sx={{ backgroundColor: 'lightblue' }}>
+                                                                    <Typography>Booking Confirmed</Typography>
+                                                                </TableCell>
+                                                                :
+                                                                data.alert_status == "warning" ?
+                                                                    <TableCell sx={{ backgroundColor: 'orange' }}>
+                                                                        <Typography>Confrirmation Pending</Typography>
+                                                                    </TableCell>
+                                                                    :
+                                                                    data.alert_status == "success" ?
+                                                                        <TableCell sx={{ backgroundColor: 'green' }}>
+                                                                            <Typography>Guest Is currently visiting</Typography>
+                                                                        </TableCell>
+                                                                        :
+                                                                        ""
+                                                    }
+                                                </TableRow>
+                                            )
+
+                                        })
+                                    }
+                                </Table>
+                            </Paper>
+                        }
                     </Paper>
                 </Box>
             </Box>
-        </Container>
+        </Container >
     )
 }
 

@@ -4,13 +4,14 @@ import { TableChart, Construction, ExitToApp, ExpandMore, MoreVert, PartyModeSha
 import { useNavigate } from 'react-router-dom'
 import Styles from '../Styles/Styles'
 import { db } from '../config/firebase'
+import moment from 'moment'
 
 function ManageBookings() {
   const navigate = useNavigate()
   const drawerWidth = 240
   const classes = Styles()
   const [status, setStatus] = React.useState("success")
-  const [alertmMessage, setAlertMessage] = React.useState()
+  const [docId, setDocId] = React.useState()
   const [open, setOpen] = React.useState(false)
   const [hotelData, setHotelData] = React.useState([])
 
@@ -24,7 +25,7 @@ function ManageBookings() {
       console.log('hello')
       console.log(hotelData)
     })
-  })
+  }, [])
 
   function ToggleEditBooking() {
     if (open == false) {
@@ -35,9 +36,9 @@ function ManageBookings() {
     }
   }
 
-  function UpdateStatus(value) {
-    db.collection("Hotels").doc("ApogeeBoutiqueHotel&Spa").collection("Bookings").doc("thato732mahloko@gmail.com").update({
-      alert_status: value
+  function UpdateStatus() {
+    db.collection("Hotels").doc("ApogeeBoutiqueHotel&Spa").collection("Bookings").doc(docId).update({
+      alert_status: status.toString()
     }).then(() => {
       console.log("Document successfully updated!");
     }).catch((error) => {
@@ -134,35 +135,55 @@ function ManageBookings() {
                           </IconButton>
                         }
                         title={data.id}
-                        subheader="September 14, 2016"
+                        subheader={moment(data.check_in).format('MMMM DD, YYYY')}
                       />
                       <CardMedia image={data.image} className={classes.imageStyle} />
                       <Alert variant="filled" severity={data.alert_status} className={classes.alertBox}>
                         {
                           data.alert_status == "error" ?
 
-                            `Booking Is cancelled. ${data.id}`
+                            `Booking Is cancelled.`
                             :
                             data.alert_status == "info" ?
-                              `Booking is confirmed ${data.id}`
+                              `Booking is confirmed`
                               :
                               data.alert_status == "warning" ?
 
-                                `Booking is pending for confirmation. ${data.id}`
+                                `Booking is pending for confirmation.`
                                 :
                                 data.alert_status == "success" ?
-                                  `Guest currently visiting. ${data.id}`
+                                  `Guest currently visiting.`
                                   :
                                   "fgf"
                         }
 
                       </Alert>
                       <Collapse in={open}>
-                        <Button variant="contained" color="error" sx={{ margin: 2 }} onClick={function n() { setStatus("error") }}>Cancel</Button>
-                        <Button variant="contained" color="info" sx={{ margin: 2 }} onClick={function n() { setStatus("info") }}>Confirm</Button>
-                        <Button variant="contained" color="warning" sx={{ margin: 2 }} onClick={function n() { setStatus("warning") }}>Pending</Button>
-                        <Button variant="contained" color="success" sx={{ margin: 2 }} onClick={function n() { setStatus("success") }}>Visiting</Button>
-                        <Typography>{status}</Typography>
+                        <Button variant="contained" color="error" sx={{ margin: 2 }} onClick={function n() { setStatus("error"); setDocId(data.id) }}>Cancel</Button>
+                        <Button variant="contained" color="info" sx={{ margin: 2 }} onClick={function n() { setStatus("info"); setDocId(data.id) }}>Confirm</Button>
+                        <Button variant="contained" color="warning" sx={{ margin: 2 }} onClick={function n() { setStatus("warning"); setDocId(data.id) }}>Pending</Button>
+                        <Button variant="contained" color="success" sx={{ margin: 2 }} onClick={function n() { setStatus("success"); setDocId(data.id) }}>Visiting</Button>
+                        <Alert variant="filled" severity={status} className={classes.alertBox}>
+                          {
+                            status == "error" ?
+
+                              `Booking Is cancelled.`
+                              :
+                              status == "info" ?
+                                `Booking is confirmed`
+                                :
+                                status == "warning" ?
+
+                                  `Booking is pending for confirmation.`
+                                  :
+                                  status == "success" ?
+                                    `Guest currently visiting.`
+                                    :
+                                    "fgf"
+                          }
+                        </Alert>
+                        <Button variant="contained" color="info" sx={{ margin: 2 }} onClick={function name() { UpdateStatus(); setOpen(false) }}>Update</Button>
+
                       </Collapse>
                     </CardContent>
                   </Card>
