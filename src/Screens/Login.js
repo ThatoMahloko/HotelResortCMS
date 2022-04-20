@@ -73,7 +73,7 @@ function Login() {
                             </form>
                             :
                             <form className={classes.formContainer}>
-                                <Rings />
+                                <Rings color='#FE6B8B'/>
                             </form>
                     }
 
