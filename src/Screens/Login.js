@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, TextField, styled, Button, Container, CssBaseline } from '@mui/material'
+import { Box, TextField, styled, Button, Container, CssBaseline, Modal, Typography } from '@mui/material'
 import { Link, useNavigate } from 'react-router-dom'
 import { db, firebase } from '../config/firebase'
 import Styles from '../Styles/Styles'
@@ -11,6 +11,11 @@ function Login() {
     const [email, setEmail] = React.useState()
     const [password, setPassword] = React.useState()
     const [load, setLoad] = React.useState(false)
+    const [open, setOpen] = React.useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+    const [modalMessage, setModalMessage] = React.useState("")
+    const [modalMessageErrorOrSuccess, setModalMessageErrorOrSuccess] = React.useState("")
 
     function Login() {
         setLoad(true)
@@ -20,15 +25,32 @@ function Login() {
                     var user = userCredential.user
                     console.log("Successfully Logged in")
                     navigate('/Home')
+                    setModalMessageErrorOrSuccess('Error!')
+                    setModalMessage("Successfully Logged In")
+                    handleOpen()
                 })
                 .catch((error) => {
                     var errorCode = error.code;
                     var errorMessage = error.message;
-                })
+                    setModalMessageErrorOrSuccess('Error!')
+                    setModalMessage(errorMessage)
+                    handleOpen()
+                });
             setLoad(false)
-        }, 10000)
-        console.log(email, password)
+        }, 2000)
     }
+
+    const style = {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: 400,
+        bgcolor: 'background.paper',
+        border: '2px solid #000',
+        boxShadow: 24,
+        p: 4,
+    };
 
     return (
         <React.Fragment>
@@ -51,9 +73,9 @@ function Login() {
                             </form>
                             :
                             <form className={classes.formContainer}>
-                                <Rings/>
+                                <Rings />
                             </form>
-                   }
+                    }
 
                     <form noValidate autoComplete='off' className={classes.formContainer}>
                         <Link to='/Signup'>
@@ -62,6 +84,21 @@ function Login() {
                     </form>
 
                 </Box>
+                <Modal
+                    open={open}
+                    onClose={handleClose}
+                    aria-labelledby="modal-modal-title"
+                    aria-describedby="modal-modal-description"
+                >
+                    <Box sx={style}>
+                        <Typography id="modal-modal-title" variant="h6" component="h2">
+                            {modalMessageErrorOrSuccess}
+                        </Typography>
+                        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                            {modalMessage}
+                        </Typography>
+                    </Box>
+                </Modal>
             </Container>
         </React.Fragment>
     )
