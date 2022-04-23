@@ -9,7 +9,7 @@ import  ReviewsIcon  from '@mui/icons-material/Reviews';
 import { useNavigate } from 'react-router-dom'
 import moment from 'moment';
 ///Add a filter feature to filter though all the users
-function Home() {
+function Review() {
     const drawerWidth = 240;
     const [hotelData, setHotelData] = React.useState([])
     const [isChecked, setischecked] = React.useState.apply(false)
@@ -129,95 +129,16 @@ function Home() {
                             }
                             sx={{ mb: 2 }}
                         >
-                            You are authorised to manage this hotel — here are all bookings!
+                            You are authorised to manage this hotel — here are all reviews!
                         </Alert>
                     </Collapse>
                  
                     <Toolbar />
-                    <Paper sx={{ width: '100%', mb: 2 }}>
-                        {
-                            <Paper sx={{ width: '100%', mb: 2 }}>
-                                <Table>
-                                    <TableHead className={classes.tabCell}>
-                                        <TableCell>
-                                            <Typography variant='h7'>
-                                                Email
-                                            </Typography>
-                                        </TableCell>
-                                        <TableCell>
-                                            <Typography variant='h7'>
-                                                #Guests
-                                            </Typography>
-                                        </TableCell>
-                                        <TableCell>
-                                            <Typography variant='h7'>
-                                                Check In
-                                            </Typography>
-                                        </TableCell>
-                                        <TableCell >
-                                            <Typography variant='h7'>
-                                                Check Out
-                                            </Typography>
-                                        </TableCell>
-                                        <TableCell >
-                                            <Typography variant='h7'>
-                                                Status
-                                            </Typography>
-                                        </TableCell>
-                                    </TableHead>
-
-                                    {
-                                        hotelData.map(data => {
-                                            return (
-                                                <TableRow>
-                                                    <TableCell>
-                                                        <Typography>{data.guest_email}</Typography>
-                                                    </TableCell>
-                                                    <TableCell>
-                                                        <Typography>{data.guest}</Typography>
-                                                    </TableCell>
-                                                    <TableCell>
-                                                        <Typography>{moment(data.check_in).format('MMMM DD, YYYY')}</Typography>
-                                                    </TableCell>
-                                                    <TableCell>
-                                                        <Typography>{moment(data.check_out).format('MMMM DD, YYYY')}</Typography>
-                                                    </TableCell>
-                                                    {
-                                                        data.alert_status == "error" ?
-                                                            <TableCell sx={{ backgroundColor: 'red' }}>
-                                                                <Typography>Booking Cancelled</Typography>
-                                                            </TableCell>
-                                                            :
-                                                            data.alert_status == "info" ?
-                                                                <TableCell color='info' sx={{ backgroundColor: 'lightblue' }}>
-                                                                    <Typography>Booking Confirmed</Typography>
-                                                                </TableCell>
-                                                                :
-                                                                data.alert_status == "warning" ?
-                                                                    <TableCell sx={{ backgroundColor: 'orange' }}>
-                                                                        <Typography>Confrirmation Pending</Typography>
-                                                                    </TableCell>
-                                                                    :
-                                                                    data.alert_status == "success" ?
-                                                                        <TableCell sx={{ backgroundColor: 'green' }}>
-                                                                            <Typography>Guest Is currently visiting</Typography>
-                                                                        </TableCell>
-                                                                        :
-                                                                        ""
-                                                    }
-                                                </TableRow>
-                                            )
-
-                                        })
-                                    }
-                                </Table>
-                            </Paper>
-                        }
-                    </Paper>
+                
                 </Box>
             </Box>
         </Container >
     )
 }
 
-export default Home
+export default Review

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Container, Box, CssBaseline, AppBar, Toolbar, Typography, Drawer, Divider, List, ListItem, ListItemIcon, ListItemText, Paper, Card, CardContent, CardMedia, CardHeader, Avatar, IconButton, Alert, Dialog, Collapse, Autocomplete, TextField, Button } from '@mui/material'
-import { TableChart, Construction, ExitToApp, ExpandMore, MoreVert, PartyModeSharp } from '@mui/icons-material'
+import { TableChart, Construction, ExitToApp, ExpandMore, MoreVert, Reviews } from '@mui/icons-material'
 import { useNavigate } from 'react-router-dom'
 import Styles from '../Styles/Styles'
 import { db } from '../config/firebase'
@@ -62,6 +62,7 @@ function ManageBookings() {
             <Typography variant="h6" noWrap component="div">
               Manage Bookings
             </Typography>
+
           </Toolbar>
         </AppBar>
         <Toolbar />
@@ -96,6 +97,15 @@ function ManageBookings() {
                 <Construction />
               </ListItemIcon>
               <ListItemText primary="Manage Bookings" />
+            </ListItem>
+
+            <ListItem button onClick={function name() {
+              navigate('/Review')
+            }}>
+              <ListItemIcon>
+                <Reviews />
+              </ListItemIcon>
+              <ListItemText primary="Review" />
             </ListItem>
           </List>
           <Divider />
